@@ -2,6 +2,28 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+// --- CORS headers: allow requests from your front-end origin (adjust as needed)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowed_origins = [
+	'https://appsalon-phpmvc-josito.mnz.dom.my.id',
+	'http://localhost:3000',
+	'http://127.0.0.1:3000'
+];
+if (in_array($origin, $allowed_origins)) {
+	header("Access-Control-Allow-Origin: $origin");
+} else {
+	header('Access-Control-Allow-Origin: *');
+}
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+// Handle preflight requests and exit early
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+	http_response_code(200);
+	exit;
+}
+
 use Controllers\AdminController;
 use Controllers\APIController;
 use Controllers\CitaController;
